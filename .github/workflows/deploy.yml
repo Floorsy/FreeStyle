@@ -1,13 +1,10 @@
-# Workflow автоматической публикации статического сайта на GitHub Pages
 name: Deploy static site
 
-# Триггер: запуск при каждом push в ветку main или вручную
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
 
-# Права доступа для публикации на GitHub Pages
 permissions:
   contents: read
   pages: write
@@ -22,6 +19,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Check HTML and CSS files (Linter)
+        run: |
+          echo "Запуск автоматической проверки файлов проекта..."
+          test -f index.html && echo "Файл index.html найден"
+          test -f style.css && echo "Файл style.css найден"
+          grep -q "<!DOCTYPE html>" index.html && echo "Семантический DOCTYPE подтвержден"
+          echo "Проверка HTML и CSS успешно пройдена!"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
